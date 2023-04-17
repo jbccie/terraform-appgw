@@ -116,42 +116,42 @@ resource "azurerm_application_gateway" "main" {
     priority                   = 1
   }
 }
-#Create two Nics
-resource "azurerm_network_interface" "nic0" {
- for_each = var.regions  
-  name                = "nic-0"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+# #Create two Nics
+# resource "azurerm_network_interface" "nic0" {
+#  for_each = var.regions  
+#   name                = "nic-0"
+#   location            = azurerm_resource_group.rg.location
+#   resource_group_name = azurerm_resource_group.rg.name
 
-  ip_configuration {
-    name                          = "nic-ipconfig-0"
-    subnet_id                     = azurerm_subnet.backend[each.key].id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-resource "azurerm_network_interface" "nic1" {
-for_each = var.regions  
-  name                = "nic-0"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+#   ip_configuration {
+#     name                          = "nic-ipconfig-0"
+#     subnet_id                     = azurerm_subnet.backend[each.key].id
+#     private_ip_address_allocation = "Dynamic"
+#   }
+# }
+# resource "azurerm_network_interface" "nic1" {
+# for_each = var.regions  
+#   name                = "nic-0"
+#   location            = azurerm_resource_group.rg.location
+#   resource_group_name = azurerm_resource_group.rg.name
 
-  ip_configuration {
-    name                          = "nic-ipconfig-0"
-    subnet_id                     = azurerm_subnet.backend[each.key].id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
+#   ip_configuration {
+#     name                          = "nic-ipconfig-0"
+#     subnet_id                     = azurerm_subnet.backend[each.key].id
+#     private_ip_address_allocation = "Dynamic"
+#   }
+# }
 
-resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "nic-assoc-0" {
-  for_each = var.regions
-  network_interface_id    = azurerm_network_interface.nic0[each.key].id
-  ip_configuration_name   = "nic-ipconfig-0"
-  backend_address_pool_id = one(azurerm_application_gateway.main[each.key].backend_address_pool).id
-}
+# resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "nic-assoc-0" {
+#   for_each = var.regions
+#   network_interface_id    = azurerm_network_interface.nic0[each.key].id
+#   ip_configuration_name   = "nic-ipconfig-0"
+#   backend_address_pool_id = one(azurerm_application_gateway.main[each.key].backend_address_pool).id
+# }
 
-resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "nic-assoc-1" {
-  for_each = var.regions
-  network_interface_id    = azurerm_network_interface.nic1[each.key].id
-  ip_configuration_name   = "nic-ipconfig-1"
-  backend_address_pool_id = one(azurerm_application_gateway.main[each.key].backend_address_pool).id
-}
+# resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "nic-assoc-1" {
+#   for_each = var.regions
+#   network_interface_id    = azurerm_network_interface.nic1[each.key].id
+#   ip_configuration_name   = "nic-ipconfig-1"
+#   backend_address_pool_id = one(azurerm_application_gateway.main[each.key].backend_address_pool).id
+# }
